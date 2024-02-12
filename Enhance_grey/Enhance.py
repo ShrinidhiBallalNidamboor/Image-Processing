@@ -20,12 +20,12 @@ for i in range(256):
 for i in range(1, 256):
     array[i]+=array[i-1]
 for i in range(256):
-    array[i]*=i
+    array[i]*=255
 
 for i in range(m):
     for j in range(n):
-        image[i][j][0]=np.round(array[image[i][j][0]])
-        image[i][j][1]=np.round(array[image[i][j][1]])
-        image[i][j][2]=np.round(array[image[i][j][2]])
+        image[i][j][0]=np.floor(array[image[i][j][0]])
+        image[i][j][1]=np.floor(array[image[i][j][1]])
+        image[i][j][2]=np.floor(array[image[i][j][2]])
 
 cv2.imwrite("enhanced.png", image)

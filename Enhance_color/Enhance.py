@@ -31,15 +31,15 @@ for i in range(1, 256):
     array2[i]+=array2[i-1]
     array3[i]+=array3[i-1]
 for i in range(256):
-    array1[i]*=i
-    array2[i]*=i
-    array3[i]*=i
+    array1[i]*=255
+    array2[i]*=255
+    array3[i]*=255
 
 for i in range(m):
     for j in range(n):
-        image[i][j][0]=np.round(array1[image[i][j][0]])
-        image[i][j][1]=np.round(array2[image[i][j][1]])
-        image[i][j][2]=np.round(array3[image[i][j][2]])
+        image[i][j][0]=np.floor(array1[image[i][j][0]])
+        image[i][j][1]=np.floor(array2[image[i][j][1]])
+        image[i][j][2]=np.floor(array3[image[i][j][2]])
 
 array=[0]*256
 
@@ -53,11 +53,11 @@ for i in range(256):
 for i in range(1, 256):
     array[i]+=array[i-1]
 for i in range(256):
-    array[i]*=i
+    array[i]*=255
 
 for i in range(m):
     for j in range(n):
-        image_hsv[i][j][2]=np.round(array[image_hsv[i][j][2]])
+        image_hsv[i][j][2]=np.floor(array[image_hsv[i][j][2]])
 
 image_hsv = cv2.cvtColor(image_hsv, cv2.COLOR_HSV2BGR)
 cv2.imwrite("enhanced.jpg", image)
