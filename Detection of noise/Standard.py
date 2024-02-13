@@ -9,7 +9,7 @@ m=len(image)
 n=len(image[0])
 o=len(image[0][0])
 
-size=1
+size=3
 
 def get(i, j, array):
     if i<0 or j<0 or i>=m or j>=n:
