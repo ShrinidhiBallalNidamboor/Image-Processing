@@ -20,11 +20,11 @@ area1=full-empty
 area2=half-empty
 area3=quarter-empty
 
-kernel=np.array([[1, 1, 1, 1, 1], 
+kernel=np.array([[0, 1, 1, 1, 0], 
                  [1, 1, 1, 1, 1], 
                  [1, 1, 1, 1, 1], 
                  [1, 1, 1, 1, 1], 
-                 [1, 1, 1, 1, 1]])
+                 [0, 1, 1, 1, 0]])
 
 area1=cv2.erode(area1, kernel, iterations=2)
 area2=cv2.erode(area2, kernel, iterations=2)
