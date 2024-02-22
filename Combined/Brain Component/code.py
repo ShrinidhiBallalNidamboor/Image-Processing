@@ -2,70 +2,24 @@ import cv2
 import numpy as np
 
 image=cv2.imread('Brain.png')
-temp=cv2.imread('Brain.png')
-hsv=cv2.imread('Brain.png')
-
 image=cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-hsv=cv2.cvtColor(hsv, cv2.COLOR_BGR2GRAY)
-temp=cv2.cvtColor(temp, cv2.COLOR_BGR2GRAY)
-
+result, threshold=cv2.threshold(image, 50, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+cv2.imwrite('binary.png', threshold)
+kernel=np.array([[1, 1, 1], [1, 1, 1], [1, 1, 1]])
+threshold=cv2.erode(threshold, kernel, iterations=2)
+(number, label, values, centroid)=cv2.connectedComponentsWithStats(threshold, 4, cv2.CV_32S)
+maximum=[0,0]
+for i in range(1, number):
+    area=values[i, cv2.CC_STAT_AREA]
+    if maximum[0]<area:
+        maximum[0]=area
+        maximum[1]=i
+component=(label==maximum[1]).astype("uint8")*255
+component=cv2.dilate(component, kernel, iterations=2)
 m=len(image)
 n=len(image[0])
-
 for i in range(m):
     for j in range(n):
-        if image[i][j]>=140:
-            image[i][j]=255
-        else:
+        if component[i][j]==0:
             image[i][j]=0
-        hsv[i][j]=image[i][j]
-
-def pushValue(i, j, value, result):
-    if i<0 or j<0 or i>=m or j>=n:
-        return
-    if image[i][j]==value:
-        result.append([i, j])
-
-def N4(i, j, value):
-    result=[]
-    pushValue(i-1, j, value, result)
-    pushValue(i+1, j, value, result)
-    pushValue(i, j-1, value, result)
-    pushValue(i, j+1, value, result)
-    return result
-
-components=[]
-for i in range(m):
-    for j in range(n):
-        if image[i][j]==255:
-            array=[[i, j]]
-            size=0
-            while array!=[]:
-                value=array.pop()
-                size+=1
-                image[value[0]][value[1]]=0
-                result=N4(value[0], value[1], 255)
-                array+=result
-            components.append([size, [i, j]])
-
-for i in range(m):
-    for j in range(n):
-        image[i][j]=hsv[i][j]
-
-for i in range(m):
-    for j in range(n):
-        hsv[i][j]=0
-
-value=max(components)
-i=value[1][0]
-j=value[1][1]
-array=[[i, j]]
-while array!=[]:
-    value=array.pop()
-    image[value[0]][value[1]]=0
-    hsv[value[0]][value[1]]=255
-    result=N4(value[0], value[1], 255)
-    array+=result
-
-hsv=cv2.cvtColor(hsv, cv2.COLOR_GRAY2BGR)
-cv2.imwrite('binary.png', hsv)
+cv2.imwrite('component.png', image)
