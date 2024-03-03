@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 
+kernel=np.array([[1, 1], [1, 1]])
 image=cv2.imread('image.png')
 robertsx=np.array([[1, 0], [0, -1]])
 robertsy=np.array([[0, -1], [1, 0]])
@@ -16,6 +17,17 @@ image3=np.abs(cv2.filter2D(image, -1, robertsx)+cv2.filter2D(image, -1, robertsy
 image4=cv2.Canny(image, 50, 80)
 image5=cv2.filter2D(image, -1, sharpen)
 image6=cv2.filter2D(image, -1, laplacian)
+image1=cv2.cvtColor(image1, cv2.COLOR_BGR2GRAY)
+image2=cv2.cvtColor(image2, cv2.COLOR_BGR2GRAY)
+image3=cv2.cvtColor(image3, cv2.COLOR_BGR2GRAY)
+result, image1=cv2.threshold(image1, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+result, image2=cv2.threshold(image2, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+result, image3=cv2.threshold(image3, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+result, image4=cv2.threshold(image4, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+image1=cv2.erode(image1, kernel, iterations=1)
+image2=cv2.erode(image2, kernel, iterations=1)
+image3=cv2.erode(image3, kernel, iterations=1)
+image4=cv2.erode(image4, kernel, iterations=1)
 cv2.imwrite('prewitt.png', image1)
 cv2.imwrite('sobel.png', image2)
 cv2.imwrite('roberts.png', image3)
