@@ -20,6 +20,10 @@ m=len(image)
 n=len(image[0])
 for i in range(m):
     for j in range(n):
+        value=image[i][j][0]/3+image[i][j][1]/3+image[i][j][2]/3
+        image[i][j][0], image[i][j][1], image[i][j][2]=value, value, value
+for i in range(m):
+    for j in range(n):
         try:
             image[i][j][0]=histogram[image[i][j][0]][0][0]/histogram[image[i][j][0]][1]
             image[i][j][1]=histogram[image[i][j][1]][0][1]/histogram[image[i][j][1]][1]
