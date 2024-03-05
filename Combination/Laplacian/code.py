@@ -1,11 +1,11 @@
 import cv2
 import numpy as np
 
-difference=1
+difference=1.6
 image=cv2.imread('image.png')
 image=cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 result1=cv2.GaussianBlur(image, (7, 7), 3)
-result2=cv2.GaussianBlur(image, (7, 7), 3+difference)
+result2=cv2.GaussianBlur(image, (7, 7), 3*difference)
 result=result2-result1
 val, result=cv2.threshold(result, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
 result3=cv2.GaussianBlur(image, (7, 7), 3)
