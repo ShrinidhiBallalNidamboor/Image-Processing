@@ -10,5 +10,5 @@ n=len(image[0])
 for i in range(m):
     for j in range(n):
         image[i][j]=255-image[i][j]
-image=cv2.morphologyEx(image, cv2.MORPH_HITMISS, kernel)
+image=image-cv2.morphologyEx(image, cv2.MORPH_HITMISS, kernel)
 cv2.imwrite('fingerprint.png', image)
