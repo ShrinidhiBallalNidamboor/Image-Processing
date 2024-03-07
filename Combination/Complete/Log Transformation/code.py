@@ -8,10 +8,9 @@ n=len(image[0])
 maximum=0
 for i in range(m):
     for j in range(n):
-        if maximum<image[i][j]:
-            maximum=image[i][j]
-maximum=np.log(maximum+1)
+        maximum=max([maximum, image[i][j]])
+maximum=np.log2(maximum+1)
 for i in range(m):
     for j in range(n):
-        image[i][j]=255*(np.log(image[i][j]+1)/maximum)
+        image[i][j]=np.log2(image[i][j]+1)*255/maximum
 cv2.imwrite('log.png', image)
