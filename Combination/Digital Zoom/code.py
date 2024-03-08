@@ -2,40 +2,46 @@ import cv2
 import numpy as np
 
 image=cv2.imread('image.png')
-image1=cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-image2=cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-temp=cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-size=3
+visit=cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+zoom=cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+image=cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 m=len(image)
 n=len(image[0])
 
-for i in range(m):
-    for j in range(n):
-        temp[i][j]=0
+def get(i, j, x, y, result):
+    if i<0 or j<0 or i>=m or j>=n or x<0 or y<0 or x>=m or y>=n:
+        return
+    if visit[x][y]==0:
+        result.append([[x, y], image[i][j]])
 
-def check(i, j, result):
+def set(i, j, value):
     if i<0 or j<0 or i>=m or j>=n:
         return
-    if temp[i][j]==0:
-        temp[i][j]=1
-        result.append([i, j])
+    zoom[i][j]=value
 
-def get(i, j, value):
-    if i<0 or j<0 or i>=m or j>=n:
-        return
-    image2[i][j]=value
+for k in range(10):
+    start=[20, 20]
+    array=[[start, image[start[0]][start[1]]]]
+    for i in range(m):
+        for j in range(n):
+            visit[i][j]=0
+    while array!=[]:
+        value=array.pop()
+        i, j=value[0][0], value[0][1]
+        visit[i][j]=1
+        result=[]
+        get(i-1, j-1, i-3, j-3, result)
+        get(i-1, j, i-3, j, result)
+        get(i+1, j-1, i+3, j-3, result)
+        get(i, j-1, i, j-3, result)
+        get(i+1, j, i+3, j, result)
+        get(i+1, j+1, i+3, j+3, result)
+        get(i+1, j, i+3, j, result)
+        get(i-1, j+1, i-3, j+3, result)
+        array+=result
+        for p in range(i-1, i+2):
+            for q in range(j-1, j+2):
+                set(p, q, value[1])
+    image=zoom.copy()
 
-start=[50, 50]
-array=[start]
-while array!=[]:
-    value=array.pop()
-    stack=[]
-    check(value[0]-2*size-1, value[1]-2*size-1, stack)
-    check(value[0]-2*size-1, value[1]+2*size+1, stack)
-    check(value[0]+2*size+1, value[1]-2*size-1, stack)
-    check(value[0]+2*size+1, value[1]+2*size+1, stack)
-    array+=stack
-    for i in range(value[0]-2*size, value[0]+2*size+1):
-        for j in range(value[1]-2*size, value[1]+2*size+1):
-            get(i, j, image1[value[0]][value[1]])
-cv2.imwrite('zoom.png', image2)
+cv2.imwrite('zoom.png', image)
