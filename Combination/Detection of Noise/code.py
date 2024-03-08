@@ -40,3 +40,6 @@ for i in histogram:
         maximum[0]=histogram[i]
         maximum[1]=i
 print('Amount the noise: ', maximum[1])
+
+image=cv2.fastNlMeansDenoisingColored(image, None, 3, 3, 1)
+cv2.imwrite('denoise.png', image)
